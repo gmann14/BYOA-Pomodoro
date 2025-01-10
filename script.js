@@ -6,9 +6,7 @@ const minutesDisplay = document.getElementById('minutes');
 const secondsDisplay = document.getElementById('seconds');
 const startButton = document.getElementById('start');
 const resetButton = document.getElementById('reset');
-const modeText = document.getElementById('mode-text');
-const workModeButton = document.getElementById('work-mode');
-const restModeButton = document.getElementById('rest-mode');
+const modeSwitch = document.getElementById('mode-switch');
 
 const WORK_TIME = 25 * 60; // 25 minutes in seconds
 const BREAK_TIME = 5 * 60; // 5 minutes in seconds
@@ -16,8 +14,12 @@ const BREAK_TIME = 5 * 60; // 5 minutes in seconds
 function updateDisplay(timeLeft) {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     minutesDisplay.textContent = minutes.toString().padStart(2, '0');
     secondsDisplay.textContent = seconds.toString().padStart(2, '0');
+    
+    // Update the page title with the current time and mode
+    document.title = `${timeString} - ${isWorkTime ? 'Pomodoro Timer' : 'Break Time'}`;
 }
 
 function switchMode() {
@@ -54,7 +56,7 @@ function resetTimer() {
     timerId = null;
     isWorkTime = true;
     timeLeft = WORK_TIME;
-    modeText.textContent = 'Work Time';
+    modeSwitch.checked = false;
     updateDisplay(timeLeft);
     startButton.textContent = 'Start';
 }
@@ -71,26 +73,16 @@ startButton.addEventListener('click', () => {
 
 resetButton.addEventListener('click', resetTimer);
 
-workModeButton.addEventListener('click', () => {
+modeSwitch.addEventListener('change', () => {
     clearInterval(timerId);
     timerId = null;
-    isWorkTime = true;
-    timeLeft = WORK_TIME;
-    modeText.textContent = 'Work Time';
-    updateDisplay(timeLeft);
-    startButton.textContent = 'Start';
-});
-
-restModeButton.addEventListener('click', () => {
-    clearInterval(timerId);
-    timerId = null;
-    isWorkTime = false;
-    timeLeft = BREAK_TIME;
-    modeText.textContent = 'Break Time';
+    isWorkTime = !modeSwitch.checked;
+    timeLeft = isWorkTime ? WORK_TIME : BREAK_TIME;
     updateDisplay(timeLeft);
     startButton.textContent = 'Start';
 });
 
 // Initialize the display
 timeLeft = WORK_TIME;
-updateDisplay(timeLeft); 
+updateDisplay(timeLeft);
+modeSwitch.checked = false; 
