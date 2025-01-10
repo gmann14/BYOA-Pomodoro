@@ -57,4 +57,19 @@ body {
 
 #rest-mode:hover {
     background-color: #F57C00;
-} 
+}
+
+.start-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: #1976D2;
+}
